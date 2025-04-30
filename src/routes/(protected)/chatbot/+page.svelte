@@ -26,7 +26,7 @@
 	import ChatMessage from '$lib/components/ChatMessage.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import { onMount, afterUpdate } from 'svelte';
+	import { onMount, afterUpdate, onDestroy } from 'svelte';
 	import { chatStorage, type ChatMessage as ChatMessageType } from '$lib/utils/utils';
 
 	let messages: ChatMessageType[] = [];
@@ -62,12 +62,20 @@
 			chatContainer.addEventListener('scroll', handleScroll);
 		}
 		
+		// Add event listener for feedback events
+		document.addEventListener('feedback', handleMessageFeedback);
+		
 		// Cleanup on component destroy
 		return () => {
 			if (chatContainer) {
 				chatContainer.removeEventListener('scroll', handleScroll);
 			}
 		};
+	});
+
+	// Clean up event listener on destroy
+	onDestroy(() => {
+		document.removeEventListener('feedback', handleMessageFeedback);
 	});
 	
 	// Generate a unique message ID
@@ -251,7 +259,6 @@
 				isUser={message.isUser} 
 				timestamp={message.timestamp}
 				messageId={message.messageId}
-				on:feedback={handleMessageFeedback}
 			/>
 		{/each}
 		
