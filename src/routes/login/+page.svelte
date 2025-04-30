@@ -45,7 +45,7 @@
 				/>
 			</div>
 
-			<Button type="submit" class="w-full">Sign in</Button>
+			<Button type="submit" variant="info" class="w-full">Sign in</Button>
 		</form>
 	</div>
 </div> 

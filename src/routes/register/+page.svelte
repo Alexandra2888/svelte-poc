@@ -53,7 +53,7 @@
 				<p class="mt-1 text-xs text-gray-500">Password must be at least 6 characters</p>
 			</div>
 
-			<Button type="submit" class="w-full">Create account</Button>
+			<Button type="submit" variant="info" class="w-full">Create account</Button>
 		</form>
 	</div>
 </div> 

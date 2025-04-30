@@ -1,6 +1,6 @@
 <!-- @component Button component with variants -->
 <script lang="ts">
-	import { cn } from "$lib/utils";
+	import { cn } from "$lib/utils/utils";
 	import { buttonVariants, type ButtonVariants } from ".";
 
 	type $$Props = ButtonVariants & {
