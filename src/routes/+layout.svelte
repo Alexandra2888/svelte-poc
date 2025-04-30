@@ -2,23 +2,40 @@
   import '../app.css';
   import { onMount } from 'svelte';
   import ThemeToggle from '$lib/components/ThemeToggle.svelte';
-  import { ModeWatcher } from "mode-watcher";
+  import { ModeWatcher, mode } from "mode-watcher";
   import { Button } from '$lib/components/ui/button';
   
   // Use a single $props
   let { data, children } = $props();
   let mounted = $state(false);
   
+  // Track current mode
+  let currentMode = $state('system');
+  
+  // Subscribe to mode changes
+  mode.subscribe(value => {
+    currentMode = value || 'system';
+    
+    // Manually add/remove dark class for debugging
+    if (mounted) {
+      if (value === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  });
+  
   onMount(() => {
     mounted = true;
   });
 </script>
 
-<!-- ModeWatcher should be at the root level, not inside the header -->
-<ModeWatcher />
+<!-- Mode Watcher with theme colors and explicit defaultMode -->
+<ModeWatcher defaultMode="dark" themeColors={{ dark: "#020817", light: "#ffffff" }} />
 
-<div class="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
-  <header class="bg-gray-100 dark:bg-gray-800 p-4 text-black dark:text-white shadow-md">
+<div class="min-h-screen">
+  <header class=" p-4 dow-md">
     <nav class="container mx-auto flex justify-between items-center px-4">
       <div class="flex items-center space-x-4">
         <a href="/" class="text-lg font-bold hover:text-gray-600 dark:hover:text-gray-300">Home</a>
@@ -28,6 +45,7 @@
       </div>
       
       <div class="flex items-center space-x-4">
+        <span class="text-xs  px-2 py-1 rounded">Mode: {currentMode}</span>
         <ThemeToggle />
         
         {#if data.user}
@@ -40,7 +58,7 @@
             <Button variant="outline" size="sm">Login</Button>
           </a>
           <a href="/register">
-            <Button size="sm">Register</Button>
+            <Button variant="default" size="sm">Register</Button>
           </a>
         {/if}
       </div>

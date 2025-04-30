@@ -41,15 +41,18 @@
 <div class="container mx-auto p-4">
   <h1 class="text-2xl mb-4">User Management</h1>
   <div class="mb-4">
+    <div class="flex items-center">
     <Input bind:value={newUser.name} placeholder="Name" class="mr-2" />
     <Input bind:value={newUser.email} placeholder="Email" class="mr-2" />
-    <Button on:click={createUser} class="bg-green-500 text-white">Add User</Button>
+    </div>
+      <Button variant="info" on:click={createUser} class="my-4">Add User</Button>
+
   </div>
   <ul>
     {#each $users as user}
       <li class="flex justify-between items-center mb-2 p-2 border-b">
         <span>{user.name} ({user.email})</span>
-        <Button on:click={() => deleteUser(user.id)} class="bg-red-500 text-white">Delete</Button>
+        <Button variant="destructive" on:click={() => deleteUser(user.id)} class="bg-red-500 text-white">Delete</Button>
       </li>
     {/each}
   </ul>

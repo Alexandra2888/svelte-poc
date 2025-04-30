@@ -77,14 +77,14 @@
 	}
 </script>
 
-<main class="chatbot-container max-w-lg mx-auto mt-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+<main class="chatbot-container max-w-lg mx-auto mt-8  shadow-lg rounded-lg overflow-hidden">
 	<div class="chatbot-header bg-blue-600 dark:bg-blue-800 text-white p-4 text-center">
 		<h2 class="text-xl font-semibold">Chatbot</h2>
 	</div>
 	
 	<div 
 		bind:this={chatContainer}
-		class="chatbot-messages p-4 h-64 overflow-y-auto bg-gray-100 dark:bg-gray-700"
+		class="chatbot-messages p-4 h-64 overflow-y-auto "
 	>
 		{#each messages as message}
 			<ChatMessage message={message.text} isUser={message.isUser} />
@@ -111,6 +111,7 @@
 			disabled={loading}
 		/>
 		<Button 
+		variant="info"
 			on:click={sendMessage}
 			disabled={loading || !newMessage.trim()} 
 			class="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
