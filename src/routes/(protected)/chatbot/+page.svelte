@@ -63,7 +63,7 @@
 		}
 		
 		// Add event listener for feedback events
-		document.addEventListener('feedback', handleMessageFeedback);
+		document.addEventListener('feedback', handleMessageFeedback as EventListener);
 		
 		// Cleanup on component destroy
 		return () => {
@@ -75,7 +75,7 @@
 
 	// Clean up event listener on destroy
 	onDestroy(() => {
-		document.removeEventListener('feedback', handleMessageFeedback);
+		document.removeEventListener('feedback', handleMessageFeedback as EventListener);
 	});
 	
 	// Generate a unique message ID
@@ -84,8 +84,9 @@
 	}
 	
 	// Handle feedback from chat messages
-	function handleMessageFeedback(event: CustomEvent) {
-		const { messageId, type } = event.detail;
+	function handleMessageFeedback(event: Event) {
+		const customEvent = event as CustomEvent;
+		const { messageId, type } = customEvent.detail;
 		console.log(`Feedback received: ${type} for message ${messageId}`);
 		
 		// In a real app, you would send this to your backend API
