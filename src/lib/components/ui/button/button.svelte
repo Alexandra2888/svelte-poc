@@ -1,25 +1,29 @@
+<!-- @component Button component with variants -->
 <script lang="ts">
-	import { Button as ButtonPrimitive } from "bits-ui";
-	import { type Events, type Props, buttonVariants } from "./index.js";
-	import { cn } from "$lib/utils.js";
+	import { cn } from "$lib/utils";
+	import { buttonVariants, type ButtonVariants } from ".";
 
-	type $$Props = Props;
-	type $$Events = Events;
+	type $$Props = ButtonVariants & {
+		type?: "button" | "submit" | "reset";
+		class?: string;
+		disabled?: boolean;
+	};
 
-	let className: $$Props["class"] = undefined;
+	let className: string = "";
+	export { className as class };
 	export let variant: $$Props["variant"] = "default";
 	export let size: $$Props["size"] = "default";
-	export let builders: $$Props["builders"] = [];
-	export { className as class };
+	export let type: $$Props["type"] = "button";
+	export let disabled: $$Props["disabled"] = false;
 </script>
 
-<ButtonPrimitive.Root
-	{builders}
-	class={cn(buttonVariants({ variant, size, className }))}
-	type="button"
+<button
+	type={type}
+	class={cn(buttonVariants({ variant, size }), className)}
+	{disabled}
 	{...$$restProps}
 	on:click
 	on:keydown
 >
 	<slot />
-</ButtonPrimitive.Root>
+</button>
