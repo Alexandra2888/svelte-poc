@@ -66,6 +66,8 @@ export type ChatMessage = {
 	text: string;
 	isUser: boolean;
 	timestamp?: number;
+	messageId?: string;
+	feedback?: 'like' | 'dislike' | null;
 };
 
 // Chat storage utility

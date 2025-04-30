@@ -47,7 +47,12 @@
 		} else {
 			// Add initial bot message if no stored messages
 			messages = [
-				{ text: 'Hello! How can I assist you today?', isUser: false, timestamp: Date.now() }
+				{ 
+					text: 'Hello! How can I assist you today?', 
+					isUser: false, 
+					timestamp: Date.now(),
+					messageId: generateMessageId()
+				}
 			];
 			chatStorage.saveMessages(messages);
 		}
@@ -64,6 +69,25 @@
 			}
 		};
 	});
+	
+	// Generate a unique message ID
+	function generateMessageId(): string {
+		return Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
+	}
+	
+	// Handle feedback from chat messages
+	function handleMessageFeedback(event: CustomEvent) {
+		const { messageId, type } = event.detail;
+		console.log(`Feedback received: ${type} for message ${messageId}`);
+		
+		// In a real app, you would send this to your backend API
+		// For example:
+		// fetch('/api/feedback', {
+		//   method: 'POST',
+		//   headers: { 'Content-Type': 'application/json' },
+		//   body: JSON.stringify({ messageId, feedbackType: type })
+		// });
+	}
 	
 	// After any update, handle scrolling
 	afterUpdate(() => {
@@ -109,7 +133,12 @@
 		
 		// Add user message to chat
 		const userMessage = newMessage.trim();
-		messages = [...messages, { text: userMessage, isUser: true, timestamp: Date.now() }];
+		messages = [...messages, { 
+			text: userMessage, 
+			isUser: true, 
+			timestamp: Date.now(),
+			messageId: generateMessageId()
+		}];
 		newMessage = '';
 		loading = true;
 		autoScroll = true;
@@ -135,16 +164,27 @@
 			
 			// Add bot response to chat
 			if (data.content) {
-				messages = [...messages, { text: data.content, isUser: false, timestamp: Date.now() }];
+				messages = [...messages, { 
+					text: data.content, 
+					isUser: false, 
+					timestamp: Date.now(),
+					messageId: generateMessageId()
+				}];
 			} else if (data.error) {
-				messages = [...messages, { text: `Error: ${data.error}`, isUser: false, timestamp: Date.now() }];
+				messages = [...messages, { 
+					text: `Error: ${data.error}`, 
+					isUser: false, 
+					timestamp: Date.now(),
+					messageId: generateMessageId()
+				}];
 			}
 		} catch (error) {
 			console.error('Error sending message:', error);
 			messages = [...messages, { 
 				text: 'Sorry, there was an error processing your request.', 
 				isUser: false, 
-				timestamp: Date.now() 
+				timestamp: Date.now(),
+				messageId: generateMessageId()
 			}];
 		} finally {
 			loading = false;
@@ -159,7 +199,12 @@
 	}
 
 	function clearHistory() {
-		messages = [{ text: 'Chat history cleared. How can I help you?', isUser: false, timestamp: Date.now() }];
+		messages = [{ 
+			text: 'Chat history cleared. How can I help you?', 
+			isUser: false, 
+			timestamp: Date.now(),
+			messageId: generateMessageId()
+		}];
 		chatStorage.saveMessages(messages);
 		autoScroll = true;
 	}
@@ -204,7 +249,9 @@
 			<ChatMessage 
 				message={message.text} 
 				isUser={message.isUser} 
-				timestamp={message.timestamp} 
+				timestamp={message.timestamp}
+				messageId={message.messageId}
+				on:feedback={handleMessageFeedback}
 			/>
 		{/each}
 		
